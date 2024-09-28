@@ -1,20 +1,16 @@
 import pygame
 
-projectileImage = pygame.image.load('assets/images/meteor_1.png')
-
 class projectile(pygame.sprite.Sprite):
 
-    def __init__(self, pos, speed):
+    def __init__(self, x, y, speed):
         pygame.sprite.Sprite.__init__(self)
-        self.image, self.rect = projectileImage
+        self.image= pygame.image.load('assets/images/Projectile.png')
         self.rect = self.image.get_rect()
-        self.rect.center = pos
+        self.rect.center = x, y
         self.vector = speed
 
-    def update(self):
-        newpos = self.calcnewpos(self.rect,self.speed)
-        self.rect = newpos
-
-    def calcnewpos(self,rect,speed):
-        (dx,dy) = (0,speed)
-        return rect.move(dx,dy)
+    def update(self, dt):
+        self.rect.move_ip(0, self.speed * dt)
+        #check if sprite has gone off screen
+        if self.rect.top > 1080:
+             self.kill()

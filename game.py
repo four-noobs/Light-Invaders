@@ -1,4 +1,3 @@
-class Game:
 
-    def game_end():
-        print("you died")
+def game_end():
+    print("you died")

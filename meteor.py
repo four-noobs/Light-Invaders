@@ -1,4 +1,4 @@
-import pygame
+import pygame, random
 
 
 class clsmeteor(pygame.sprite.Sprite):
@@ -8,10 +8,12 @@ class clsmeteor(pygame.sprite.Sprite):
         self.image = pygame.image.load('assets/images/meteor_1.png')
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
-        self.speedy = 2
+        self.speedy = 3
+        self.speedx = random.randint(-2,2)
 
-    def update(self):
-        self.rect.move_ip(0, self.speedy)
+    def update(self,bg_speed):
+        speedy = self.speedy+bg_speed
+        self.rect.move_ip(self.speedx, speedy)
         #check if sprite has gone off screen
         if self.rect.top > 1080:
              self.kill()
