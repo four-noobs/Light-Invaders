@@ -1,11 +1,10 @@
 import pygame, math, random
-import projectile
 
 class clsenemy(pygame.sprite.Sprite):
 
     def __init__(self):
         pos = (random.randint(100, 1820), -100)
-        vector = (random.randrange(250, 290), random.randint(1,4))
+        vector = (random.randrange(250, 290), random.randint(1,3))
 
         pygame.sprite.Sprite.__init__(self)
         self.image= pygame.image.load('assets/images/enemy.png')
@@ -23,6 +22,3 @@ class clsenemy(pygame.sprite.Sprite):
         (angle,z) = self.vector
         (dx,dy) = (z*math.cos(angle),z*math.sin(angle))
         return dx * dt,dy * dt
-    
-    def shoot(self):
-        return projectile((self.rect.left.x + self.rect.right.x)/2, (self.rect.bottom.y + self.rect.top.y)/2, random.randint(1,6))

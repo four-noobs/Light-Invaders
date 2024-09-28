@@ -2,7 +2,8 @@ import pygame, math, sys, random
 from player import Player
 from meteor import clsmeteor
 from enemy import clsenemy
-from game import game_end
+from projectile import projectile 
+from game import *
 from speed_orb import Speed_orb
 # pygame setup
 pygame.init()
@@ -19,19 +20,19 @@ player = Player((screen.get_width() / 2, screen.get_height() / 2), screen.get_wi
 
 speed_orbs = pygame.sprite.Group()
 SpawnOrb = pygame.USEREVENT + 1
-Orbtimer = 500
+Orbtimer = 1000
 pygame.time.set_timer(SpawnOrb, Orbtimer)
 
 meteors = pygame.sprite.Group()
-SpawnMeteor = pygame.USEREVENT + 1
-Meteortimer = 2000
-pygame.time.set_timer(SpawnMeteor, Meteortimer)  # 1000 milliseconds = 1 second
+SpawnMeteor = pygame.USEREVENT + 2
+Meteortimer = 1000
+pygame.time.set_timer(SpawnMeteor, Meteortimer)  # 1000 milliseconds = 1 secoand
 
 enemies = pygame.sprite.Group()
 
 projectiles = pygame.sprite.Group()
-SpawnProjectiles = pygame.USEREVENT + 1
-projectilestimer = 1000
+SpawnProjectiles = pygame.USEREVENT + 3
+projectilestimer = 3000
 pygame.time.set_timer(SpawnProjectiles, projectilestimer) 
 
 
@@ -46,7 +47,8 @@ while running:
         elif event.type == SpawnOrb:  
             speed_orbs.add(Speed_orb(random.randint(90,1830),100))
         elif event.type == SpawnProjectiles:   
-            projectiles.add(clsenemy.shoot())
+            for i in enemies:
+                projectiles.add(projectile(i.rect.center))
 
     if random.randint(0,10) == 0:
         enemies.add(clsenemy())
@@ -61,21 +63,37 @@ while running:
 
     if(player.position.y>=1000):
         game_end()
+        running = False
 
     speed_orbs.update(bg_speed*dt)
     speed_orbs.draw(screen)
     
     meteors.update(bg_speed*dt)
     meteors.draw(screen)
-    collisions = pygame.sprite.spritecollide(player, meteors, False)
-    if collisions:
-        print("Collision detected!")
+    hit_meteor = pygame.sprite.spritecollide(player, meteors, True)
+    if hit_meteor:
+        player.speed=max(0,player.speed+collision('slow')) 
+
+    hit_enemy = pygame.sprite.spritecollide(player, enemies, True)
+    if hit_enemy:
+        player.speed=max(0,player.speed+collision('slow')) 
+
+    hit_orb = pygame.sprite.spritecollide(player, speed_orbs, True)
+    if hit_orb:
+        player.speed+= collision('fast')
+
+    hit_projectile = pygame.sprite.spritecollide(player, projectiles, True)
+    if hit_projectile:
+        player.speed=max(0,player.speed+collision('slow'))
 
     enemies.update(bg_speed * dt)
     enemies.draw(screen)
 
     projectiles.update(bg_speed*dt)
     projectiles.draw(screen)
+
+    
+    display_speed(screen, player.speed)
     
     # flip() the display to put your work on screen
     pygame.display.flip()
@@ -88,5 +106,9 @@ while running:
     background_y+=dt*bg_speed
     if(background_y>=0):background_y=-3600
 
+PlayAgain = True   
+while PlayAgain:
+    break
+    
 pygame.quit()
-
+sys.exit()

@@ -2,12 +2,12 @@ import pygame
 
 class projectile(pygame.sprite.Sprite):
 
-    def __init__(self, x, y, speed):
+    def __init__(self, pos):
         pygame.sprite.Sprite.__init__(self)
         self.image= pygame.image.load('assets/images/Projectile.png')
         self.rect = self.image.get_rect()
-        self.rect.center = x, y
-        self.vector = speed
+        self.rect.center = pos
+        self.speed = 4
 
     def update(self, dt):
         self.rect.move_ip(0, self.speed * dt)
