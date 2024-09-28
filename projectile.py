@@ -5,6 +5,7 @@ class projectile(pygame.sprite.Sprite):
     def __init__(self, pos):
         pygame.sprite.Sprite.__init__(self)
         self.image= pygame.image.load('assets/images/Projectile.png')
+        self.image=pygame.transform.scale_by(self.image,2)
         self.rect = self.image.get_rect()
         self.rect.center = pos
         self.speed = 4

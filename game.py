@@ -3,7 +3,7 @@ def game_end():
     print("you died")
 
 def display_speed(screen, speed):
-    font = pygame.font.Font(None, 90) 
+    font = pygame.font.Font(None, int(screen.get_width() / 21)) 
     
     text = font.render(f"Speed: {speed}", True, (255, 255, 255)) 
 
@@ -13,7 +13,6 @@ def display_speed(screen, speed):
     
 def collision(type):
     if type=="slow":
-        return -500
+        return -200
     if type=="fast":
         return 200
-    

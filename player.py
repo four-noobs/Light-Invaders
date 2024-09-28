@@ -8,15 +8,13 @@ class Player:
         self.screen_width = screen_width
         self.screen_height = screen_height
         self.original_image = pygame.image.load("assets/images/Player.png").convert_alpha()
-        self.original_image = pygame.transform.scale(self.original_image, (80, 80))
+        self.original_image = pygame.transform.scale(self.original_image, (screen_width/28, screen_width/28))
 
         self.image = self.original_image
-        self.image = pygame.transform.scale(self.image, (80, 80))
+        self.image = pygame.transform.scale(self.image, (screen_width/28, screen_width/28))
         self.angle = 0
         self.width = self.image.get_width()
-        print(self.width)
         self.height = self.image.get_height()
-        print(self.height)
         
         self.rect = self.image.get_rect(center=self.position)
         self.hitbox = pygame.Rect(self.position.x - self.width/2, self.position.y - self.height/2, self.width, self.height)

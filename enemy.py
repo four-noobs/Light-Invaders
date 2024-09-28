@@ -8,6 +8,7 @@ class clsenemy(pygame.sprite.Sprite):
 
         pygame.sprite.Sprite.__init__(self)
         self.image= pygame.image.load('assets/images/enemy.png')
+        self.image=pygame.transform.scale_by(self.image,4)
         self.rect = self.image.get_rect()
         self.rect.center = pos
         self.vector = vector
