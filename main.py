@@ -170,9 +170,6 @@ black = (0, 0, 0)
 testcolour = (11, 219, 53)
 lightcream = (255, 253, 208)
 darkcream = (255,241,208)
-
-shieldinfotxt = font.render("Press space to use shield.",True, lightcream)
-
 speedtxt = font.render(f"Your highscore is {highscore}.",True, lightcream)
 Gameovertxt = font.render("Game Over", True, lightcream)
 Playtxt = font.render("Play", True, black)

@@ -3,7 +3,7 @@ import pygame, math, random
 class clsenemy(pygame.sprite.Sprite):
 
     def __init__(self):
-        pos = (random.randint(100, 1820), -100)
+        pos = (random.randint(100, 1820), -20)
         vector = (random.randrange(250, 290), random.randint(1,3))
 
         pygame.sprite.Sprite.__init__(self)
@@ -16,7 +16,7 @@ class clsenemy(pygame.sprite.Sprite):
     def update(self, dt):
         self.rect.move_ip(self.calcnewpos(dt))
         #check if sprite has gone off screen
-        if self.rect.top > 1080:
+        if self.rect.top > 1080 or self.rect.bottom<(-80):
              self.kill()
 
     def calcnewpos(self, dt):

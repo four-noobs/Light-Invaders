@@ -5,7 +5,7 @@ def game_end():
 def display_speed(screen, speed):
     font = pygame.font.Font(None, int(screen.get_width() / 21)) 
     
-    text = font.render(f"Speed: {speed}", True, (255, 255, 255)) 
+    text = font.render(f"Speed: {speed}                                    Press space to use shield.", True, (255, 255, 255)) 
 
     text_rect = text.get_rect(center=(screen.get_width() / 2, 50))  
     
@@ -17,4 +17,4 @@ def collision(type):
     if type=="veryslow":
         return -200
     if type=="fast":
-        return 100
+        return 50
