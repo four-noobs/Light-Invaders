@@ -13,6 +13,8 @@ def display_speed(screen, speed):
     
 def collision(type):
     if type=="slow":
+        return -100
+    if type=="veryslow":
         return -200
     if type=="fast":
-        return 200
+        return 100

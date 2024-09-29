@@ -33,6 +33,8 @@ class Player:
         if keys[pygame.K_a]:
             self.position.x -= self.speed * dt
             self.angle = 45
+        elif keys[pygame.K_d]:
+            self.position.x += self.speed * dt
             self.angle = -45
         else:
             self.angle = 0

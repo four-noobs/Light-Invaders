@@ -105,7 +105,7 @@ def play():
         hit_meteor = pygame.sprite.spritecollide(player, meteors, True, pygame.sprite.collide_mask)
         if hit_meteor:
             if (not player.shield):
-                player.speed=max(0,player.speed+collision('slow')) 
+                player.speed=max(0,player.speed+collision('veryslow')) 
             else:
                 player.shieldTimer = 0
             max_speed=max(player.speed,max_speed)
@@ -150,7 +150,7 @@ def play():
         # dt is delta time in seconds since last frame, used for framerate-
         # independent physics.
         dt = clock.tick(60) / 1000
-        bg_speed+=dt
+        bg_speed+=dt*3
         background_y+=dt*bg_speed
         if(background_y>=0):background_y=-3600
 
@@ -170,6 +170,9 @@ black = (0, 0, 0)
 testcolour = (11, 219, 53)
 lightcream = (255, 253, 208)
 darkcream = (255,241,208)
+
+shieldinfotxt = font.render("Press space to use shield.",True, lightcream)
+
 speedtxt = font.render(f"Your highscore is {highscore}.",True, lightcream)
 Gameovertxt = font.render("Game Over", True, lightcream)
 Playtxt = font.render("Play", True, black)
