@@ -14,7 +14,7 @@ def play():
     display_info = pygame.display.Info()
     screen_width = display_info.current_w
     screen_height = display_info.current_h
-    screen = pygame.display.set_mode((screen_width, screen_height), pygame.FULLSCREEN)
+    screen = pygame.display.set_mode()
     clock = pygame.time.Clock()
     running=True
     dt = 0
@@ -102,14 +102,20 @@ def play():
         
         meteors.update(bg_speed*dt)
         meteors.draw(screen)
-        hit_meteor = pygame.sprite.spritecollide(player, meteors, True)
+        hit_meteor = pygame.sprite.spritecollide(player, meteors, True, pygame.sprite.collide_mask)
         if hit_meteor:
-            player.speed=max(0,player.speed+collision('slow')) 
+            if (not player.shield):
+                player.speed=max(0,player.speed+collision('slow')) 
+            else:
+                player.shieldTimer = 0
             max_speed=max(player.speed,max_speed)
             music.meteor_sound()
         hit_enemy = pygame.sprite.spritecollide(player, enemies, True)
         if hit_enemy:
-            player.speed=max(0,player.speed+collision('slow')) 
+            if (not player.shield):
+                player.speed=max(0,player.speed+collision('slow')) 
+            else:
+                player.shieldTimer = 0
             max_speed=max(player.speed,max_speed)
             music.enemy_sound()
         hit_orb = pygame.sprite.spritecollide(player, speed_orbs, True)
@@ -120,7 +126,10 @@ def play():
 
         hit_projectile = pygame.sprite.spritecollide(player, projectiles, True)
         if hit_projectile:
-            player.speed=max(0,player.speed+collision('slow'))
+            if (not player.shield):
+                player.speed=max(0,player.speed+collision('slow')) 
+            else:
+                player.shieldTimer = 0
             max_speed=max(player.speed,max_speed)
             music.enemy_sound()
 
@@ -152,7 +161,7 @@ music=Music()
 display_info = pygame.display.Info()
 screen_width = display_info.current_w
 screen_height = display_info.current_h
-screen = pygame.display.set_mode((screen_width, screen_height), pygame.FULLSCREEN)
+screen = pygame.display.set_mode((screen_width,screen_height))
 music.end_music()
 background=pygame.image.load('assets/images/background.png')
 font = pygame.font.Font(None, 74)
@@ -162,11 +171,12 @@ testcolour = (11, 219, 53)
 lightcream = (255, 253, 208)
 darkcream = (255,241,208)
 speedtxt = font.render(f"Your highscore is {highscore}.",True, lightcream)
-Gameovertxt = font.render("Game Over", True, black)
+Gameovertxt = font.render("Game Over", True, lightcream)
 Playtxt = font.render("Play", True, black)
 play_button = pygame.Rect(screen_width // 2 - 60, screen_height // 2, 120, 70)
 Exittxt = font.render("Exit", True, black)
 exit_button = pygame.Rect(screen_width // 2 - 60, screen_height // 2 + 80, 120, 70)
+
 
 while True: 
     for event in pygame.event.get():
@@ -177,17 +187,19 @@ while True:
                 mouse_pos = event.pos
                 if play_button.collidepoint(mouse_pos):
                     speed = play()
-                    if speed > highscore:
-                        highscore = speed
-                    speedtxt = font.render(f"Your speed was {speed} and your high score is {highscore}", True, black)
-                    screen.blit(Gameovertxt, (screen_width // 2 - Gameovertxt.get_width() // 2, screen_height // 2 - Gameovertxt.get_height() // 2 - 50))
-                    
-                if exit_button.collidepoint(mouse_pos):
-                    
-                    f = open("highscore.txt", "w")
-                    f.write(highscore)
-                    f.close()
+                    highscore=speed
 
+                    f = open("highscore.txt", "r")
+                    highscore = max(highscore,int(f.read()))
+                    f.close()
+                    f = open("highscore.txt", "w")
+                    f.write(str(highscore))
+                    f.close()
+                    
+                    speedtxt = font.render(f"Your speed was {speed} and your high score is {highscore}", True, lightcream)
+                    screen.blit(Gameovertxt, (screen_width // 2 - Gameovertxt.get_width() // 2, screen_height // 2 - Gameovertxt.get_height() // 2 - 50))
+
+                if exit_button.collidepoint(mouse_pos):
                     pygame.quit()
                     sys.exit()
 
@@ -199,6 +211,7 @@ while True:
 
     pygame.draw.rect(screen, darkcream, exit_button)
     screen.blit(Exittxt, (exit_button.x + 10, exit_button.y + 10)) 
+ 
 
     pygame.display.flip()
     

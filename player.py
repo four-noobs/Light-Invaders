@@ -15,7 +15,10 @@ class Player:
         self.angle = 0
         self.width = self.image.get_width()
         self.height = self.image.get_height()
-        
+
+        self.shield = False
+        self.shieldDuration = 300     # how many dt
+        self.shieldTimer = 0
         self.rect = self.image.get_rect(center=self.position)
         self.hitbox = pygame.Rect(self.position.x - self.width/2, self.position.y - self.height/2, self.width, self.height)
 
@@ -30,11 +33,21 @@ class Player:
         if keys[pygame.K_a]:
             self.position.x -= self.speed * dt
             self.angle = 45
-        elif keys[pygame.K_d]:
-            self.position.x += self.speed * dt
             self.angle = -45
         else:
             self.angle = 0
+
+        if keys[pygame.K_SPACE] and self.shield == False:
+            self.shield = True
+            self.shieldTimer = self.shieldDuration
+            self.speed=max(0,self.speed - 50) 
+
+        if self.shieldTimer > 0:
+            self.shieldTimer -= 1
+        else:
+            self.shieldTimer = 0
+            self.shield = False
+
 
         if self.position.x - self.width > self.screen_width:
             self.position.x = -self.width
@@ -51,4 +64,7 @@ class Player:
 
     def draw(self, screen):
         screen.blit(self.image, self.rect)
-        pygame.draw.rect(screen, "green", self.hitbox, 2)   # for testing only
+        #pygame.draw.rect(screen, "green", self.hitbox, 2)   # for testing only
+
+        if self.shield:
+            pygame.draw.circle(screen, "blue", self.rect.center, int (self.screen_width / 32), int(self.screen_width / 240))  # draw the shield
